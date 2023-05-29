@@ -1,0 +1,32 @@
+skrypt podzielony jest na dwie części:
+
+w pierwszej z nich pracuje on na pliku z żądaniami ftp:
+	-> funkcja grep filtruje plik zwracając jedynie linie z frazą "OK DOWNLOAD"
+	-> funckja cut dzieli każdą linijkę na sekcje oddzielone od siebie znakiem ", i zwraca
+	   jedynie tekst w sekcjach 2 oraz 4
+	-> funckja sort z parametrem u sortuje otrzymane dane usuwając duplikaty
+	-> funkcja sed przeszukuje wszystkie linijki w otrzymanym pliku (1,\$), a następnie
+	   podmienia wszystkie wystąpienia frazy ".*/" na frazę "", a więc usuwa wszystko od 
+	   początku od ostatniego wystąpienia znaku '/'
+	-> funkcja grep z otrzymanego pliku wybiera jedynie te wiersze, które zawierają frazę "\.iso"
+
+w drugiej części skrypt zlicza pobrane wersje linuxa na podstawie żądań http:
+	-> pierwsza dwa wsytąpienia funkcji grep zwracają jeynie te wiersze, w których zawiera sie
+		- "http://cdlinux.pl/download.html"
+		- "\.iso"
+	   czyli żądania wysłane do strony pobierania linuxa, w których występuje nazwa pliku .iso
+	   w ten sposób zostają jedynie żądania, w których pobierany jest linux
+	-> funkcja cut zachwouje pola od początku pliku do drugiego wystąpienia ", zmniejsza to
+	   wiersze na których operuje skrypt
+	-> funkcja sed usuwa (zastępuje na "") wszystkie znaki które nie są ":" ([^:]*) z 
+	   początku wersu (^) do pierwszego znaku : włącznie
+		- w wyniku otrzymane zostają werszy z ip użytkownika na początku
+	-> kolejna funkcja sed usuwa wszystkie znaki pomiędzy [ oraz ] w całej linicje (g od global)
+	-> sort -u pozbywa się duplikatów id
+	-> koeljny grep z atrybutem -o pokazuje zwraca jedynie znalazieone frazy w wierszu,
+	   to wywołanie grep wyszkuje słowa kończące się na ".iso" i zaczynające się po '/'
+		- w wyniku dostajemy listę unikalnych pobrań systemów
+	
+	
+outputy dwoch powyzszych funckji zapisywane sa w pliu helper.txt, nastepnie plik ten jest sortowany
+oraz zliczane sa powtorzenia wierszy, wiec dostajemy liczbe lacznych pobran systemow

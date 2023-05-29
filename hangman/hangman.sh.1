@@ -1,0 +1,29 @@
+.TH HANGMAN 1 "28.05.2023" "1.0" "Manual page for HANGMAN"
+.SH NAME
+Hangman - Hangman game for one player.
+
+.SH SYNOPSIS
+.B hangman
+[\fB-h\fR]
+[\fB-v\fR]
+
+.SH DESCRIPTION
+- Simple hangman game. Application conatians menu with three options: set difficulty (3, 5 or 7 lives), add new word to the database, start the game. 
+User can move through menu with WSAD, and enter option with E. 
+Database is contatined in a 'words.txt' file, where each line represets new word to guess. Every word is converted to contain only small letters. 
+If file is not present, it will be created and default words will be added. 
+Game starts after submiting 'Play' button. 
+Entering wrong characters (eg. numbers, symbols) is blocked. 
+Big letters are converted into small letters in order to match the word. 
+Entering already guessed letter is blocked. 
+When player guesses the word or has no more tries, end screen is shown. 
+
+.SH OPTIONS
+-h - info about the script
+-v - info about version and author
+
+.SH BUGS
+No known bugs
+
+.SH AUTHOR
+Jan Kaczerski - jkaczerski@gmail.com - github.com/ar1valdi

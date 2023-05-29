@@ -1,0 +1,75 @@
+#!/bin/bash
+opcja=0
+
+interface="
+
+----Find Your File----
+ 1. Wpisz nazwe pliku
+ 2. Wpisz katalog w ktorym znajduje sie plik
+ 3. Plik mlodszy niz
+ 4. Plik starszy niz
+ 5. Plik z uprawnieniamni
+ 6. Zawartosc pliku
+ 7. Szukaj
+ 8. Koniec
+ 9. Pokaz zapisane informacje"
+ 
+ in=""
+ empty=""
+ name=""
+ dir=""
+ youngerThan=""
+ olderThan=""
+ permissions=""
+ inside=""
+ option=0
+
+while [ $option -ne 8 ]; do
+   	echo "$interface"
+    		read -p "Wybierz opcje "  option
+    	
+    	case $option in
+    		1) read -p "Podaj nazwe pliku: " name;;
+    		2) read -p "Podaj sciezke do katalogu: " dir;;
+    		3) read -p "Podaj date: (YYYY-MM-DD HH:MM:SS): " youngerThan;;
+    		4) read -p "Podaj date: (YYYY-MM-DD HH:MM:SS)" olderThan;;
+    		5) read -p "Podaj uprawnienia (format 777): " permissions;;
+    		6) read -p "Podaj zawartosc: " inside;;
+    		9) echo "$name"
+		   echo "$dir"
+		   echo "$youngerThan"
+		   echo "$olderThan"
+		   echo "$permissions"
+		   echo "$inside"
+		   read -p "Zatwierdz aby wyjsc" in;;
+    	esac
+    	
+    	# Search
+    	if [ "$option" -eq 7 ]; then
+    		criteria="find "
+    		if [ "$dir" != "" ]; then
+    			criteria="$criteria $dir -type f"
+    		else
+    			criteria="$criteria /home -type f"
+    		fi
+    		if [ "$name" != "" ]; then
+    			criteria="$criteria -name \"$name\""
+    		fi
+    		if [ "$youngerThan" != "" ]; then
+    			criteria="$criteria -not -newermt \"$youngerThan\""
+    		fi
+    		if [ "$olderThan" != "" ]; then
+    			criteria="$criteria -newermt \"$olderThan\""
+    		fi
+    		if [ "$permissions" != "" ]; then
+    			criteria="$criteria -perm $permissions"
+    		fi
+    		if [ "$inside" != "" ]; then
+    			criteria="$criteria -exec grep -l \"$inside\" {} \;"
+    		fi
+    		
+		eval $criteria
+		read -p "Zatwierdz aby wyjsc" in
+    	fi
+    	
+done
